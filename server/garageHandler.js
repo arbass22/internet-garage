@@ -9,6 +9,9 @@ function GarageHandler() {
 GarageHandler.prototype.addGarage = function(garage) {
   var id = garage.getId();
   garages[id] = garage;
+  garage.socket.on('disconnect', function() {
+    delete garages[id];
+  });
 }
 
 GarageHandler.prototype.openGarage = function(id) {

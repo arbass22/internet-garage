@@ -11,11 +11,21 @@ var garageHandler = new GarageHandler();
 
 app.get('/', function(req, res) {
   res.json({message: "Hello"});
-})
+});
+
+app.post('/open/:id', function(req, res) {
+  garageHandler.openGarage(req.params.id);
+  res.send('ok');
+});
+
+app.post('/close/:id', function(req, res) {
+  garageHandler.closeGarage(req.params.id);
+  res.send('ok');
+});
 
 io.on('connection', function(socket){
   var garage = new Garage(socket);
-  garageHandler.add(garage);
+  garageHandler.addGarage(garage);
 });
 
 http.listen(port);
