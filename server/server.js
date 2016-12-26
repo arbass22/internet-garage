@@ -3,10 +3,11 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Garage = require('./garage.js');
+var GarageHandler = require('./garageHandler.js');
 
 var port = process.env.PORT || 3000;
 
-var garages = [];
+var garageHandler = new GarageHandler();
 
 app.get('/', function(req, res) {
   res.json({message: "Hello"});
@@ -14,9 +15,8 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket){
   var garage = new Garage(socket);
-  garage.open();
+  garageHandler.add(garage);
 });
-
 
 http.listen(port);
 console.log("App listening on port " + port);

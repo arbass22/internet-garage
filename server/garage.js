@@ -18,3 +18,7 @@ Garage.prototype.close = function() {
   console.log('Requesting garage #' + this.garage_id + ' door to close...');
   this.socket.emit('close');
 }
+
+Garage.prototype.getId = function() {
+  return this.garage_id;
+}
