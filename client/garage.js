@@ -42,3 +42,11 @@ Garage.prototype.close = function() {
 Garage.prototype.isClosed = function() {
   return false;
 }
+
+Garage.prototype.signalOpened = function() {
+  this.socket.emit('opened');
+}
+
+Garage.prototype.signalClosed = function() {
+  this.socket.emit('closed');
+}
