@@ -23,6 +23,11 @@ app.post('/close/:id', function(req, res) {
   res.send('ok');
 });
 
+app.get('/status/:id', function(req, res) {
+  var status = garageHandler.getStatus(req.params.id);
+  res.send(status);
+})
+
 io.on('connection', function(socket){
   var garage = new Garage(socket);
   garageHandler.addGarage(garage);
