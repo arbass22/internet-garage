@@ -9,18 +9,25 @@ function Garage(garage_id, trigger_pin, sensor_pin) {
   // Used to detect if door is open or closed
   this.sensorPin = sensor_pin;
 
-  var io = socketio('http://localhost:3000', {query: 'garage_id=' + this.garage_id});
-  io.on('connection', function(socket) {
+  var socket = socketio('http://localhost:3000', {query: 'garage_id=' + this.garage_id});
+
+  socket.on('connect', function() {
     this.socket = socket;
-    socket.on('open', function() {
-      this.open();
-    });
-    socket.on('close', function() {
-      this.close();
-    });
-    socket.on('disconnect', function() {
-      this.socket = null;
-    })
+  });
+
+  var open = this.open;
+  socket.on('open', function() {
+    open();
+  });
+
+  var close = this.close;
+  socket.on('close', function() {
+    close();
+  });
+
+  socket.on('disconnect', function() {
+    console.log("socket disconnected");
+    this.socket = null;
   });
 }
 
