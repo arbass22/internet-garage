@@ -2,32 +2,31 @@ var socketio = require('socket.io-client');
 
 module.exports = Garage;
 
-function Garage(garage_id, trigger_pin, sensor_pin) {
-  this.garage_id = garage_id
-  // Used to open/close garage door relay
-  this.triggerPin  = trigger_pin;
-  // Used to detect if door is open or closed
-  this.sensorPin = sensor_pin;
+function Garage(garageId, triggerPin, sensorPin) {
+  this.garageId = garageId
+  this.triggerPin  = triggerPin;
+  this.sensorPin = sensorPin;
 
-  var socket = socketio('http://localhost:3000', {query: 'garage_id=' + this.garage_id});
+  // Create a socket to cloud server
+  var socket = socketio('http://localhost:3000', {query: 'garageId=' + this.garageId});
+
+  var self = this;
 
   socket.on('connect', function() {
-    this.socket = socket;
+    self.socket = socket;
   });
 
-  var open = this.open;
   socket.on('open', function() {
-    open();
+    self.open();
   });
 
-  var close = this.close;
   socket.on('close', function() {
-    close();
+    self.close();
   });
 
   socket.on('disconnect', function() {
     console.log("socket disconnected");
-    this.socket = null;
+    self.socket = null;
   });
 }
 
