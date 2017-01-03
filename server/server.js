@@ -14,13 +14,21 @@ app.get('/', function(req, res) {
 });
 
 app.post('/open/:id', function(req, res) {
-  garageHandler.openGarage(req.params.id);
-  res.send('ok');
+  var success = garageHandler.openGarage(req.params.id);
+  if (success) {
+    res.status(200).send('Success');
+  } else {
+    res.status(404).send('Garage not found');
+  }
 });
 
 app.post('/close/:id', function(req, res) {
-  garageHandler.closeGarage(req.params.id);
-  res.send('ok');
+  var success = garageHandler.closeGarage(req.params.id);
+  if (success) {
+    res.status(200).send('Success');
+  } else {
+    res.status(404).send('Garage not found');
+  }
 });
 
 app.get('/status/:id', function(req, res) {

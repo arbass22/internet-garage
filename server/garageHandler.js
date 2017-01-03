@@ -16,18 +16,26 @@ GarageHandler.prototype.addGarage = function(garage) {
 
 GarageHandler.prototype.openGarage = function(id) {
   var garage = garages[id];
-  // TODO: Handle missing garage
+  if (garage == null) {
+    return false;
+  }
   garage.open();
+  return true;
 }
 
 GarageHandler.prototype.closeGarage = function(id) {
   var garage = garages[id];
-  // TODO: Handle missing garage
+  if (garage == null) {
+    return false;
+  }
   garage.close();
+  return true;
 }
 
 GarageHandler.prototype.getStatus = function(id) {
   var garage = garages[id];
-  // TODO: Handle missing garage
+  if (garage == null) {
+    return false
+  }
   return garage.getStatus();
 }
