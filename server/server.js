@@ -1,17 +1,19 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 var Garage = require('./garage.js');
 var GarageHandler = require('./garageHandler.js');
+var validator = require('./validator.js');
 
 var port = process.env.PORT || 3000;
 
-var garageHandler = new GarageHandler();
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(validator);
 
-app.get('/', function(req, res) {
-  res.json({message: "Hello"});
-});
+var garageHandler = new GarageHandler();
 
 app.post('/open/:id', function(req, res) {
   var success = garageHandler.openGarage(req.params.id);
