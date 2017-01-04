@@ -1,7 +1,11 @@
-module.exports = Validator;
+var fs = require("fs");
+
+// Parse private key from file
+var key_file = fs.readFileSync('./config/key.json');
+var key_json = JSON.parse(key_file);
+var server_key = key_json['key'];
 
 function Validator(req, res, next) {
-  console.log("Performing validation...")
   var method = req.method;
   var key = '';
   if (method === 'GET') {
@@ -18,5 +22,7 @@ function Validator(req, res, next) {
 }
 
 function checkKey(key) {
-  return (key === "private_key");
+  return (key === server_key);
 }
+
+module.exports = Validator;
