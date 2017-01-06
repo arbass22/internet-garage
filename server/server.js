@@ -16,31 +16,31 @@ app.use(validator);
 var garageHandler = new GarageHandler();
 
 app.post('/open/:id', function(req, res) {
-  var success = garageHandler.openGarage(req.params.id);
-  if (success) {
-    res.status(200).send('Success');
-  } else {
-    res.status(404).send('Garage not found');
-  }
+    var success = garageHandler.openGarage(req.params.id);
+    if (success) {
+        res.status(200).send('Success');
+    } else {
+        res.status(404).send('Garage not found');
+    }
 });
 
 app.post('/close/:id', function(req, res) {
-  var success = garageHandler.closeGarage(req.params.id);
-  if (success) {
-    res.status(200).send('Success');
-  } else {
-    res.status(404).send('Garage not found');
-  }
+    var success = garageHandler.closeGarage(req.params.id);
+    if (success) {
+        res.status(200).send('Success');
+    } else {
+        res.status(404).send('Garage not found');
+    }
 });
 
 app.get('/status/:id', function(req, res) {
-  var status = garageHandler.getStatus(req.params.id);
-  res.send(status);
+    var status = garageHandler.getStatus(req.params.id);
+    res.send(status);
 })
 
 io.on('connection', function(socket){
-  var garage = new Garage(socket);
-  garageHandler.addGarage(garage);
+    var garage = new Garage(socket);
+    garageHandler.addGarage(garage);
 });
 
 http.listen(port);
