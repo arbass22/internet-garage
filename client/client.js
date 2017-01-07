@@ -23,7 +23,10 @@ function setupGarage(garage_config) {
 function setupSocket(garage) {
     var socket = socketio(
 		server, 
-		{ query: 'garageId=' + garage.getId() }
+		{ query: 
+			'garageId=' + garage.getId() + '&' +
+			'status=' + garage.getStatus()
+		}
 	);
 
     socket.on('connect', function() {
@@ -43,10 +46,12 @@ function setupSocket(garage) {
     });
 	
 	garage.setOpenedCallback(function() {
+		console.log("Garage opened");
 		socket.emit('opened');
 	});
 
 	garage.setClosedCallback(function() {
+		console.log("Garage closed");
 		socket.emit('closed');
 	});
 }
