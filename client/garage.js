@@ -3,6 +3,11 @@
 var socketio = require('socket.io-client');
 var Gpio = require('onoff').Gpio;
 
+var status = {
+	OPEN: 'open',
+	CLOSED: 'closed'
+};
+
 class Garage {
     constructor(id, triggerPin, sensorPin) {
 		// Store id to send to server
@@ -11,12 +16,28 @@ class Garage {
         this.triggerPin  = new Gpio(triggerPin, 'out');
 		this.triggerPin.setActiveLow(true); // Using low-level trigger relay
 		// Pin for reading door open/close status from magnetic switch
-        this.sensorPin = new Gpio(sensorPin, 'in');
-		this.sensorPin.watch(function(val, err) {
-			if(val == 0) {
-				this.openedCallback();
-			} else if (val == 1) {
-				this.closedCallback();
+        this.sensorPin = new Gpio(sensorPin, 'in', 'both');
+		// Set current status
+		this.status = this.sensorPin.readSync() 
+			? status.CLOSED 
+			: status.OPEN;
+		
+		var self = this;
+		// Flag used to ignore duplicate reads from magnetic switch
+		this.watchFlag = false;
+		this.sensorPin.watch(function(err, val) {
+			if (self.watchFlag == false) {
+				self.watchFlag = true;
+				// Reset flag to false after 2 sec
+				setTimeout(function() {
+					self.watchFlag = false;
+				}, 2000);
+
+				if(val == 0) {
+					self.openedCallback();
+				} else if (val == 1) {
+					self.closedCallback();
+				}
 			}
 		});
 	}
@@ -35,18 +56,8 @@ class Garage {
 		this.triggerRelay();
 	}
 
-    isClosed() {
-        return false;
-    }
-
-    signalOpened() {
-		// TODO: fix this
-        this.socket.emit('opened');
-    }
-
-    signalClosed() {
-		// TODO: fix this
-        this.socket.emit('closed');
+    getStatus() {
+        return this.status;
     }
 
 	// Sets pin high for 1 sec then low again

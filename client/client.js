@@ -43,10 +43,12 @@ function setupSocket(garage) {
     });
 	
 	garage.setOpenedCallback(function() {
+		console.log("Garage opened");
 		socket.emit('opened');
 	});
 
 	garage.setClosedCallback(function() {
+		console.log("Garage closed");
 		socket.emit('closed');
 	});
 }
