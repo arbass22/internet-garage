@@ -12,6 +12,13 @@ class Garage {
 		this.triggerPin.setActiveLow(true); // Using low-level trigger relay
 		// Pin for reading door open/close status from magnetic switch
         this.sensorPin = new Gpio(sensorPin, 'in');
+		this.sensorPin.watch(function(val, err) {
+			if(val == 0) {
+				this.openedCallback();
+			} else if (val == 1) {
+				this.closedCallback();
+			}
+		});
 	}
 
 	getId() {
@@ -32,12 +39,12 @@ class Garage {
         return false;
     }
 
-    signalOpened() {i
+    signalOpened() {
 		// TODO: fix this
         this.socket.emit('opened');
     }
 
-    signalClosed() {i
+    signalClosed() {
 		// TODO: fix this
         this.socket.emit('closed');
     }
@@ -49,6 +56,14 @@ class Garage {
 		setTimeout(function() {
 			self.triggerPin.writeSync(0);
 		}, 1000);
+	}
+
+	setOpenedCallback(cb) {
+		this.openedCallback = cb;
+	}
+
+	setClosedCallback(cb) {
+		this.closedCallback = cb;
 	}
 }
 
