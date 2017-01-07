@@ -9,7 +9,7 @@ var status = {
 function Garage(socket) {
     this.socket = socket;
     this.garageId = socket.handshake.query.garageId;
-    this.status = status.UNKNOWN;
+    this.status = socket.handshake.query.status;
     console.log('Established connection with garage #' + this.garageId);
     var self = this;
 
@@ -21,12 +21,12 @@ function Garage(socket) {
     });
 
     socket.on('closed', function() {
-        console.log("Garage #" + this.garageId + " closed");
+        console.log("Garage #" + self.garageId + " closed");
         self.status = status.CLOSED;
     });
 
     socket.on('opened', function() {
-        console.log("Garage #" + this.garageId + " opened");
+        console.log("Garage #" + self.garageId + " opened");
         self.status = status.OPEN;
     });
 }
