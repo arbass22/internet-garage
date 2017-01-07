@@ -21,10 +21,12 @@ function Garage(socket) {
     });
 
     socket.on('closed', function() {
+        console.log("Garage #" + this.garageId + " closed");
         self.status = status.CLOSED;
     });
 
     socket.on('opened', function() {
+        console.log("Garage #" + this.garageId + " opened");
         self.status = status.OPEN;
     });
 }
