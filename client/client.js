@@ -23,7 +23,10 @@ function setupGarage(garage_config) {
 function setupSocket(garage) {
     var socket = socketio(
 		server, 
-		{ query: 'garageId=' + garage.getId() }
+		{ query: 
+			'garageId=' + garage.getId() + '&' +
+			'status=' + garage.getStatus()
+		}
 	);
 
     socket.on('connect', function() {
