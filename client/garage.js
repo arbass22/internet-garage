@@ -4,40 +4,19 @@ var socketio = require('socket.io-client');
 var Gpio = require('onoff').Gpio;
 
 class Garage {
-    constructor(garageId, triggerPin, sensorPin) {
+    constructor(id, triggerPin, sensorPin) {
 		// Store id to send to server
-        this.garageId = garageId
+        this.id = id
 		// Pin for triggering relay to close/open door
         this.triggerPin  = new Gpio(triggerPin, 'out');
-		this.triggerPin.setActiveLow(true);
+		this.triggerPin.setActiveLow(true); // Using low-level trigger relay
 		// Pin for reading door open/close status from magnetic switch
         this.sensorPin = new Gpio(sensorPin, 'in');
+	}
 
-        // Create a socket to cloud server
-        var socket = socketio(
-			'http://192.168.1.13:3000', 
-			{query: 'garageId=' + this.garageId}
-		);
-
-        var self = this;
-
-        socket.on('connect', function() {
-            self.socket = socket;
-        });
-
-        socket.on('open', function() {
-            self.open();
-        });
-
-        socket.on('close', function() {
-            self.close();
-		});
-
-        socket.on('disconnect', function() {
-            console.log("socket disconnected");
-            self.socket = null;
-        });
-    }
+	getId() {
+		return this.id;
+	}
 
     open() {
         console.log("Opening garage door...");
@@ -53,11 +32,13 @@ class Garage {
         return false;
     }
 
-    signalOpened() {
+    signalOpened() {i
+		// TODO: fix this
         this.socket.emit('opened');
     }
 
-    signalClosed() {
+    signalClosed() {i
+		// TODO: fix this
         this.socket.emit('closed');
     }
 

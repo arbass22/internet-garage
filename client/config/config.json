@@ -1,0 +1,12 @@
+{
+	"server": "http://192.168.1.13:3000",
+	"garages": [
+		{
+			"id": "1",
+			"name": "Jerry's Garage Door",
+			"triggerPin": "18",
+			"sensorPin": "17"
+		}
+
+	]
+}
