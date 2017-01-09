@@ -13,8 +13,8 @@ class Garage {
 		// Store id to send to server
         this.id = id
 		// Pin for triggering relay to close/open door
-        this.triggerPin  = new Gpio(triggerPin, 'out');
-		this.triggerPin.setActiveLow(true); // Using low-level trigger relay
+		// Initialized to high for use with low edge triggered relay
+        this.triggerPin  = new Gpio(triggerPin, 'high');
 		// Pin for reading door open/close status from magnetic switch
         this.sensorPin = new Gpio(sensorPin, 'in', 'both');
 		// Set current status
@@ -33,9 +33,11 @@ class Garage {
 					self.watchFlag = false;
 				}, 2000);
 
-				if(val == 0) {
+				if(val == 0) {	
+					self.status = status.OPEN;
 					self.openedCallback();
 				} else if (val == 1) {
+					self.status = status.CLOSED;
 					self.closedCallback();
 				}
 			}
@@ -47,25 +49,29 @@ class Garage {
 	}
 
     open() {
-        console.log("Opening garage door...");
-		this.triggerRelay();
+		if (this.status == status.CLOSED) {
+        	console.log("Opening garage door...");
+			this.triggerRelay();
+		}
 	}
 
     close() {
-        console.log("Closing garage door...");
-		this.triggerRelay();
+		if (this.status == status.OPEN) {
+    		console.log("Closing garage door...");
+			this.triggerRelay();
+		}
 	}
 
     getStatus() {
         return this.status;
     }
 
-	// Sets pin high for 1 sec then low again
+	// Sets pin low for 1 sec then high again
 	triggerRelay() {
-		this.triggerPin.writeSync(1);
+		this.triggerPin.writeSync(0);
 		var self = this;
 		setTimeout(function() {
-			self.triggerPin.writeSync(0);
+			self.triggerPin.writeSync(1);
 		}, 1000);
 	}
 
