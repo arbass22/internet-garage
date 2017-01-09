@@ -10,6 +10,7 @@ var validator = require('./validator.js');
 var port = process.env.PORT || 3000;
 
 // Middleware
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator);
 
