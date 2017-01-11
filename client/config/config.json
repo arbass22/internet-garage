@@ -6,7 +6,12 @@
 			"name": "Jerry's Garage Door",
 			"triggerPin": "18",
 			"sensorPin": "17"
+		},
+		{
+			"id": "2",
+			"name": "Shari's Garage",
+			"triggerPin": "12",
+			"sensorPin": "13"
 		}
-
 	]
 }
