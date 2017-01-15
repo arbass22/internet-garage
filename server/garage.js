@@ -3,7 +3,9 @@ module.exports = Garage;
 var status = {
     OPEN: 'open',
     CLOSED: 'closed',
-    UNKNOWN: 'unknown'
+    UNKNOWN: 'unknown',
+	OPENING: 'opening',
+	CLOSING: 'closing'
 };
 
 function Garage(socket) {
@@ -29,6 +31,11 @@ function Garage(socket) {
         console.log("Garage #" + self.garageId + " opened");
         self.status = status.OPEN;
     });
+
+	socket.on('status', function(data) {
+		self.status = data.status;
+		console.log("New status: " + data.status);
+	});
 }
 
 Garage.prototype.open = function() {

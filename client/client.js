@@ -44,15 +44,9 @@ function setupSocket(garage) {
     socket.on('disconnect', function() {
         console.log("socket disconnected");
     });
-	
-	garage.setOpenedCallback(function() {
-		console.log("Garage opened");
-		socket.emit('opened');
-	});
 
-	garage.setClosedCallback(function() {
-		console.log("Garage closed");
-		socket.emit('closed');
+	garage.setStatusCallback(function(newStatus) {
+		socket.emit('status', { status: newStatus });
 	});
 }
 

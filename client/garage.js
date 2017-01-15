@@ -34,11 +34,9 @@ class Garage {
 				}, 2000);
 
 				if(val == 0) {	
-					self.status = status.OPEN;
-					self.openedCallback();
+					self.setStatus(status.OPEN);
 				} else if (val == 1) {
-					self.status = status.CLOSED;
-					self.closedCallback();
+					self.setStatus(status.CLOSED);
 				}
 			}
 		});
@@ -66,6 +64,11 @@ class Garage {
         return this.status;
     }
 
+	setStatus(newStatus) {
+		this.status = newStatus;
+		this.statusCallback(newStatus);
+	}
+
 	// Sets pin low for 1 sec then high again
 	triggerRelay() {
 		this.triggerPin.writeSync(0);
@@ -75,12 +78,8 @@ class Garage {
 		}, 1000);
 	}
 
-	setOpenedCallback(cb) {
-		this.openedCallback = cb;
-	}
-
-	setClosedCallback(cb) {
-		this.closedCallback = cb;
+	setStatusCallback(cb) {
+		this.statusCallback = cb;
 	}
 }
 
